@@ -1,9 +1,10 @@
 # casparcg-connect (subflow)
-Node-Red Subflow to send amcp to a casparcg server and get osc from a casparcg server<br>
+Node-Red Subflow to build up an amcp and osc connection to a casparcg server
 
 ## casparcg
 - downloads: https://github.com/CasparCG/Server/releases?after=v2.3.3-lts-stable
 - documentation: https://github.com/CasparCG/help/wiki
+- testet version: 2.3.3-lts-stable
 
 ### casparcg.config
 be shure to have these tags included:
