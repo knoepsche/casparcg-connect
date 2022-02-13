@@ -1,0 +1,600 @@
+[
+    {
+        "id": "59074a15405b6d14",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8a17dcfe.d933b",
+        "type": "tab",
+        "label": "AMCP",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "82403a972ac7824f",
+        "type": "subflow",
+        "name": "CasparCG Server",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 580,
+                "wires": [
+                    {
+                        "id": "db08daa3c753706c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1920,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "b776547b196b83a9",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1920,
+                "y": 440,
+                "wires": [
+                    {
+                        "id": "e87fce072a8ca15e",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1920,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "cfbe7b9ffeeb6cc9",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "inputLabels": [
+            "amcp"
+        ],
+        "outputLabels": [
+            "osc",
+            "amcp response",
+            "connection state"
+        ],
+        "icon": "node-red/bridge.svg",
+        "status": {
+            "x": 1920,
+            "y": 320,
+            "wires": [
+                {
+                    "id": "2b64fa22837eca67",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
+        "id": "c05e719861f26e66",
+        "type": "osc",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "path": "",
+        "metadata": false,
+        "x": 530,
+        "y": 160,
+        "wires": [
+            [
+                "68c6ae0726cc1b53",
+                "57acdaafa9b92d84"
+            ]
+        ]
+    },
+    {
+        "id": "5d71eb4fc12fc649",
+        "type": "udp in",
+        "z": "82403a972ac7824f",
+        "name": "UDP (OSC)",
+        "iface": "",
+        "port": "5253",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "buffer",
+        "x": 370,
+        "y": 160,
+        "wires": [
+            [
+                "c05e719861f26e66"
+            ]
+        ]
+    },
+    {
+        "id": "68c6ae0726cc1b53",
+        "type": "trigger",
+        "z": "82403a972ac7824f",
+        "name": "Trigger if 1 second no message",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "date",
+        "duration": "1000",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "ms",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 830,
+        "y": 200,
+        "wires": [
+            [
+                "bee4abd1000c7f01"
+            ]
+        ]
+    },
+    {
+        "id": "4d180bf3fa58518f",
+        "type": "catch",
+        "z": "82403a972ac7824f",
+        "name": "Catch Connection Errors",
+        "scope": [
+            "5d71eb4fc12fc649",
+            "5eb3a0b5c12ce197"
+        ],
+        "uncaught": false,
+        "x": 850,
+        "y": 280,
+        "wires": [
+            [
+                "bee4abd1000c7f01"
+            ]
+        ]
+    },
+    {
+        "id": "57acdaafa9b92d84",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "OSC Gate",
+        "func": "if(msg.connected==false){\n    context.set(\"connection\", false);\n    msg.payload = \"disconnected\";\n    return [null, msg];\n}else{\n    if(context.get('connection')==false){\n        context.set(\"connection\", true);\n        return [msg, {payload:\"connected\"}];\n    }else{\n        return [msg, null];\n    }\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestartet wird\ncontext.set('connection', false);",
+        "finalize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestoppt wird\ncontext.set('connection', false);",
+        "libs": [],
+        "x": 1330,
+        "y": 160,
+        "wires": [
+            [
+                "b776547b196b83a9"
+            ],
+            [
+                "1c5cb376266f10f6",
+                "754e50d92a79f144",
+                "cfbe7b9ffeeb6cc9",
+                "2b64fa22837eca67"
+            ]
+        ],
+        "outputLabels": [
+            "Osc",
+            "Connection"
+        ],
+        "info": "### all messages\nare put through to output 1 (Osc)\n\n### msg.connected (boolean)\n - **false** disables output 1\n - **true** enables output 1\n - generates a new message on output 2 (Connection)<br>\n    **payload** is `connected` or `disconnected`\n"
+    },
+    {
+        "id": "5eb3a0b5c12ce197",
+        "type": "tcp request",
+        "z": "82403a972ac7824f",
+        "server": "127.0.0.1",
+        "port": "5250",
+        "out": "sit",
+        "splitc": " ",
+        "name": "TCP (AMCP)",
+        "x": 1110,
+        "y": 440,
+        "wires": [
+            [
+                "1c5cb376266f10f6"
+            ]
+        ],
+        "info": "offen gehaltene AMCP-Connection"
+    },
+    {
+        "id": "bee4abd1000c7f01",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "disconnected",
+        "func": "const message = {connected:false}\nreturn message;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 240,
+        "wires": [
+            [
+                "57acdaafa9b92d84"
+            ]
+        ]
+    },
+    {
+        "id": "754e50d92a79f144",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "Command Gate",
+        "func": "if(msg.payload == 'connected'){\n    context.set('connected', true);\n    return [null, {reset:true}];\n}else if(msg.payload == 'disconnected'){\n    context.set('connected', false);\n    return [null, {reset:true}];\n}\nif(context.get('connected')==true){\n    return [msg, null];\n}else{\n    return [null, {reset:true}];\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestartet wird\ncontext.set('connected', false);",
+        "finalize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestoppt wird\ncontext.set('connected', false);",
+        "libs": [],
+        "x": 880,
+        "y": 440,
+        "wires": [
+            [
+                "5eb3a0b5c12ce197"
+            ],
+            [
+                "a24ee4a1eac91f81"
+            ]
+        ],
+        "outputLabels": [
+            "Data",
+            "Reset"
+        ]
+    },
+    {
+        "id": "a24ee4a1eac91f81",
+        "type": "simple-queue",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "firstMessageBypass": true,
+        "bypassInterval": "0",
+        "x": 710,
+        "y": 580,
+        "wires": [
+            [
+                "754e50d92a79f144"
+            ]
+        ]
+    },
+    {
+        "id": "1c5cb376266f10f6",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "Response Gate",
+        "func": "if(msg.payload == 'connected'){\n    context.set('connected', true);\n    return [{reset:true}, null];\n}else if(msg.payload == 'disconnected'){\n    context.set('connected', false);\n    return [{reset:true}, null];\n}\nif(context.get('connected')==true){\n    return [msg, {trigger:true}];\n}else{\n    return [{reset:true}, null];\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestartet wird\ncontext.set('connected', false);",
+        "finalize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestoppt wird\ncontext.set('connected', false);",
+        "libs": [],
+        "x": 1340,
+        "y": 440,
+        "wires": [
+            [
+                "ccdc13643b29a2d5"
+            ],
+            [
+                "a24ee4a1eac91f81"
+            ]
+        ],
+        "outputLabels": [
+            "Data / Reset",
+            "Trigger"
+        ]
+    },
+    {
+        "id": "ccdc13643b29a2d5",
+        "type": "join",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 1570,
+        "y": 440,
+        "wires": [
+            [
+                "e87fce072a8ca15e"
+            ]
+        ]
+    },
+    {
+        "id": "622aa063938f3563",
+        "type": "split",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "splt": "\\r\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 350,
+        "y": 580,
+        "wires": [
+            [
+                "9840e699f4618782"
+            ]
+        ]
+    },
+    {
+        "id": "9840e699f4618782",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "add \\r\\n",
+        "func": "msg.payload = msg.payload + '\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 580,
+        "wires": [
+            [
+                "a24ee4a1eac91f81"
+            ]
+        ]
+    },
+    {
+        "id": "db08daa3c753706c",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "kill last \\r\\n",
+        "func": "msg.requestid = msg._msgid;\nmsg.payload = msg.payload.slice(0, msg.payload.length-2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 580,
+        "wires": [
+            [
+                "622aa063938f3563"
+            ]
+        ]
+    },
+    {
+        "id": "cfbe7b9ffeeb6cc9",
+        "type": "change",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "CCG connection",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1760,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b776547b196b83a9",
+        "type": "change",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "CCG osc",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1760,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e87fce072a8ca15e",
+        "type": "change",
+        "z": "82403a972ac7824f",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "_queueCount",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "_queuetimestamp",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "ttl",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1760,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b64fa22837eca67",
+        "type": "function",
+        "z": "82403a972ac7824f",
+        "name": "State",
+        "func": "if(msg.payload == \"disconnected\"){\n    msg.payload = ({fill:\"red\",shape:\"ring\",text:\"disconnected\"});\n}else{\n    msg.payload = ({fill:\"green\",shape:\"ring\",text:\"connected\"});\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1580,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "38173d12604dd3d5",
+        "type": "inject",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 440,
+        "y": 480,
+        "wires": [
+            [
+                "cd6b7e0eaa76fb25"
+            ]
+        ]
+    },
+    {
+        "id": "cd6b7e0eaa76fb25",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "func": "msg.topic = 'CCG Command LoadBG & Play';\nmsg.payload = 'LoadBG 1-1 \"AMB.mp4\" loop\\r\\nPlay 1-1\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 480,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "5bfc7fbdd76c9ec0",
+        "type": "subflow:82403a972ac7824f",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "env": [],
+        "x": 820,
+        "y": 480,
+        "wires": [
+            [
+                "8db1268c6c939438"
+            ],
+            [
+                "71c84f86fd1a5db4"
+            ],
+            [
+                "94153612411662b5"
+            ]
+        ]
+    },
+    {
+        "id": "71c84f86fd1a5db4",
+        "type": "debug",
+        "z": "8a17dcfe.d933b",
+        "name": "RESPONSE",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1330,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "8db1268c6c939438",
+        "type": "debug",
+        "z": "8a17dcfe.d933b",
+        "name": "OSC",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1310,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "94153612411662b5",
+        "type": "debug",
+        "z": "8a17dcfe.d933b",
+        "name": "CONNECTION",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 540,
+        "wires": []
+    }
+]

@@ -2,7 +2,10 @@
     "name": "casparcg-connect",
     "description": "A Node-RED Project",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-contrib-osc": "1.1.0",
+        "node-red-contrib-simple-queue": "1.0.2"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flows.json",
