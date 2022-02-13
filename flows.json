@@ -375,7 +375,7 @@
         "id": "cfbe7b9ffeeb6cc9",
         "type": "change",
         "z": "82403a972ac7824f",
-        "name": "",
+        "name": "set topic",
         "rules": [
             {
                 "t": "set",
@@ -390,7 +390,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1760,
+        "x": 1740,
         "y": 240,
         "wires": [
             []
@@ -400,7 +400,7 @@
         "id": "b776547b196b83a9",
         "type": "change",
         "z": "82403a972ac7824f",
-        "name": "",
+        "name": "set topic",
         "rules": [
             {
                 "t": "set",
@@ -415,7 +415,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1760,
+        "x": 1740,
         "y": 140,
         "wires": [
             []
@@ -425,7 +425,7 @@
         "id": "e87fce072a8ca15e",
         "type": "change",
         "z": "82403a972ac7824f",
-        "name": "",
+        "name": "delete items",
         "rules": [
             {
                 "t": "delete",
@@ -448,7 +448,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1760,
+        "x": 1740,
         "y": 440,
         "wires": [
             []
@@ -492,30 +492,11 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 440,
-        "y": 480,
+        "x": 280,
+        "y": 460,
         "wires": [
             [
-                "cd6b7e0eaa76fb25"
-            ]
-        ]
-    },
-    {
-        "id": "cd6b7e0eaa76fb25",
-        "type": "function",
-        "z": "8a17dcfe.d933b",
-        "name": "",
-        "func": "msg.topic = 'CCG Command LoadBG & Play';\nmsg.payload = 'LoadBG 1-1 \"AMB.mp4\" loop\\r\\nPlay 1-1\\r\\n';\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 480,
-        "wires": [
-            [
-                "5bfc7fbdd76c9ec0"
+                "40ca99bfdc1c857e"
             ]
         ]
     },
@@ -525,8 +506,8 @@
         "z": "8a17dcfe.d933b",
         "name": "",
         "env": [],
-        "x": 820,
-        "y": 480,
+        "x": 870,
+        "y": 640,
         "wires": [
             [
                 "8db1268c6c939438"
@@ -552,8 +533,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 480,
+        "x": 1310,
+        "y": 640,
         "wires": []
     },
     {
@@ -569,8 +550,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1310,
-        "y": 420,
+        "x": 1290,
+        "y": 580,
         "wires": []
     },
     {
@@ -586,8 +567,263 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 540,
+        "x": 1320,
+        "y": 700,
         "wires": []
+    },
+    {
+        "id": "a50f7c101c4944f2",
+        "type": "inject",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 700,
+        "wires": [
+            [
+                "de6e3ba4fe252c5a"
+            ]
+        ]
+    },
+    {
+        "id": "40ca99bfdc1c857e",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "LoadBG & Play",
+        "func": "msg.topic = 'CCG: LoadBG & Play AMB'\nmsg.payload = 'LoadBG 1-1 \"AMB.mp4\" loop\\r\\nPlay 1-1\\r\\n'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 460,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "de6e3ba4fe252c5a",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "Clear Channel",
+        "func": "msg.topic = 'CCG: Clear Channel';\nmsg.payload = 'Clear 1\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 700,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "48ef5be5ed54a316",
+        "type": "inject",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 780,
+        "wires": [
+            [
+                "5ce3aa119a26fb2e"
+            ]
+        ]
+    },
+    {
+        "id": "5ce3aa119a26fb2e",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "Clip Search",
+        "func": "msg.topic = 'CCG: Clip Search';\nmsg.payload = 'CLS\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 780,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "bc621849707f62fb",
+        "type": "inject",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 860,
+        "wires": [
+            [
+                "b3cbbc7de63eb6b1"
+            ]
+        ]
+    },
+    {
+        "id": "b3cbbc7de63eb6b1",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "Clip Info",
+        "func": "msg.topic = 'CCG: Clip Info AMB';\nmsg.payload = 'CINF \"AMB\"\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 860,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "ed5a048103eeb1cf",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "Fill & Rotate",
+        "func": "msg.topic = 'CCG: Fill & Rotate'\nmsg.payload = 'MIXER 1-1 FILL 0 0 0.5 0.5 25 DEFER\\r\\nMIXER 1-1 ROTATION 90 25 easeinsine DEFER\\r\\nMIXER 1-1 COMMIT\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 540,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "0f166ac10a38c183",
+        "type": "inject",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 540,
+        "wires": [
+            [
+                "ed5a048103eeb1cf"
+            ]
+        ]
+    },
+    {
+        "id": "69e3754cc67097c0",
+        "type": "function",
+        "z": "8a17dcfe.d933b",
+        "name": "Clear Mixer",
+        "func": "msg.topic = 'CCG: Clear Mixer';\nmsg.payload = 'MIXER 1-1 CLEAR\\r\\n';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 620,
+        "wires": [
+            [
+                "5bfc7fbdd76c9ec0"
+            ]
+        ]
+    },
+    {
+        "id": "9a63f9a68e847df6",
+        "type": "inject",
+        "z": "8a17dcfe.d933b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 620,
+        "wires": [
+            [
+                "69e3754cc67097c0"
+            ]
+        ]
     }
 ]
